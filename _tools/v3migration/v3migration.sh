@@ -3,7 +3,7 @@
 set -eu
 
 # this scripts is used when migrating v2 to v3.
-# usage: cd ${GOPATH}/src/github.com/shirou/gopsutil && bash tools/v3migration/v3migration.sh
+# usage: cd ${GOPATH}/src/github.com/roachadam/gopsutil && bash tools/v3migration/v3migration.sh
 
 
 
@@ -33,7 +33,7 @@ cd "${V3DIR}"
 go mod init
 
 ###  change import path
-find . -name "*.go" -print0 | xargs -0 -I@ sed -i 's|"github.com/shirou/gopsutil/|"github.com/shirou/gopsutil/v3/|g' @
+find . -name "*.go" -print0 | xargs -0 -I@ sed -i 's|"github.com/roachadam/gopsutil/|"github.com/roachadam/gopsutil/v3/|g' @
 
 ############ Issues
 
