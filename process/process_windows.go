@@ -721,7 +721,7 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 			var buf = make([]byte, size)
 			err := windows.GetFileInformationByHandleEx(windows.Handle(file), windows.FileNameInfo, &buf[0], size)
 			if err != nil {
-				fmt.Printf("GetFileInformationByHandleEx err: %s\n", err)
+				// fmt.Printf("GetFileInformationByHandleEx err: %s\n", err)
 				return
 			}
 			fileName = string(buf)
