@@ -697,8 +697,8 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 		// release the new handle
 		defer windows.CloseHandle(windows.Handle(file))
 
-		fileType, err := windows.GetFileType(windows.Handle(file))
-		if err != nil || fileType != windows.FILE_TYPE_DISK {
+		_, err := windows.GetFileType(windows.Handle(file))
+		if err != nil { //|| fileType != windows.FILE_TYPE_DISK {
 			continue
 		}
 
