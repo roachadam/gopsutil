@@ -698,10 +698,10 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 		// release the new handle
 		defer windows.CloseHandle(windows.Handle(file))
 
-		_, err := windows.GetFileType(windows.Handle(file))
-		if err != nil { //|| fileType != windows.FILE_TYPE_DISK {
-			continue
-		}
+		// _, err := windows.GetFileType(windows.Handle(file))
+		// if err != nil { //|| fileType != windows.FILE_TYPE_DISK {
+		// 	continue
+		// }
 
 		var fileName string
 		ch := make(chan struct{})
@@ -710,6 +710,7 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 			var buf [syscall.MAX_LONG_PATH]uint16
 			n, err := windows.GetFinalPathNameByHandle(windows.Handle(file), &buf[0], syscall.MAX_LONG_PATH, 0)
 			if err != nil {
+				fmt.Printf("GetFinalPathNameByHandle err: %s\n", err)
 				return
 			}
 
