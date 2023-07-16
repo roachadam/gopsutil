@@ -717,8 +717,9 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 			// 	fmt.Printf("GetFinalPathNameByHandle err: %s\n", err)
 			// 	return
 			// }
-			var buf = make([]byte, syscall.MAX_LONG_PATH)
-			err := windows.GetFileInformationByHandleEx(windows.Handle(file), windows.FileNameInfo, &buf[0], uint32(unsafe.Sizeof(FILE_NAME_INFO{})))
+			var size = uint32(unsafe.Sizeof(FILE_NAME_INFO{}))
+			var buf = make([]byte, size)
+			err := windows.GetFileInformationByHandleEx(windows.Handle(file), windows.FileNameInfo, &buf[0], size)
 			if err != nil {
 				fmt.Printf("GetFileInformationByHandleEx err: %s\n", err)
 				return
