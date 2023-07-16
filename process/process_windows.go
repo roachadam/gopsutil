@@ -687,9 +687,10 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 
 	for _, handle := range handles {
 		var file uintptr
-		if int32(handle.UniqueProcessId) != p.Pid {
-			continue
-		}
+		// if int32(handle.UniqueProcessId) != p.Pid {
+		// 	continue
+		// }
+
 		if windows.DuplicateHandle(process, windows.Handle(handle.HandleValue), currentProcess, (*windows.Handle)(&file),
 			0, true, windows.DUPLICATE_SAME_ACCESS) != nil {
 			continue
@@ -720,10 +721,10 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 		case <-time.NewTimer(100 * time.Millisecond).C:
 			continue
 		case <-ch:
-			fileInfo, err := os.Stat(fileName)
-			if err != nil || fileInfo.IsDir() {
-				continue
-			}
+			// fileInfo, err := os.Stat(fileName)
+			// if err != nil || fileInfo.IsDir() {
+			// 	continue
+			// }
 
 			if _, exists := fileExists[fileName]; !exists {
 				files = append(files, OpenFilesStat{
