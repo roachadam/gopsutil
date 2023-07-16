@@ -687,9 +687,9 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 
 	for _, handle := range handles {
 		var file uintptr
-		// if int32(handle.UniqueProcessId) != p.Pid {
-		// 	continue
-		// }
+		if int32(handle.UniqueProcessId) != p.Pid {
+			continue
+		}
 
 		if windows.DuplicateHandle(process, windows.Handle(handle.HandleValue), currentProcess, (*windows.Handle)(&file),
 			0, true, windows.DUPLICATE_SAME_ACCESS) != nil {
