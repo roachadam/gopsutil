@@ -15,7 +15,6 @@ import (
 	"strings"
 	"syscall"
 	"time"
-	"unicode/utf16"
 	"unsafe"
 
 	"github.com/roachadam/gopsutil/v3/cpu"
@@ -707,14 +706,19 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 		ch := make(chan struct{})
 
 		go func() {
-			var buf [syscall.MAX_LONG_PATH]uint16
-			n, err := windows.GetFinalPathNameByHandle(windows.Handle(file), &buf[0], syscall.MAX_LONG_PATH, 0)
+			// var buf [syscall.MAX_LONG_PATH]uint16
+			// n, err := windows.GetFinalPathNameByHandle(windows.Handle(file), &buf[0], syscall.MAX_LONG_PATH, 0)
+			// if err != nil {
+			// 	fmt.Printf("GetFinalPathNameByHandle err: %s\n", err)
+			// 	return
+			// }
+			var buf []byte
+			err := windows.GetFileInformationByHandleEx(windows.Handle(file), windows.FileNameInfo, &buf[0], uint32(len(buf)))
 			if err != nil {
-				fmt.Printf("GetFinalPathNameByHandle err: %s\n", err)
+				fmt.Printf("GetFileInformationByHandleEx err: %s\n", err)
 				return
 			}
-
-			fileName = string(utf16.Decode(buf[:n]))
+			fileName = string(buf)
 			ch <- struct{}{}
 		}()
 
