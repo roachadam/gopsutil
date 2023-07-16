@@ -646,6 +646,11 @@ func (p *Process) ChildrenWithContext(ctx context.Context) ([]*Process, error) {
 	return out, nil
 }
 
+type FILE_NAME_INFO struct {
+	FileNameLength uint32
+	FileName       []uint16
+}
+
 func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, error) {
 	files := make([]OpenFilesStat, 0)
 	fileExists := make(map[string]bool)
@@ -713,7 +718,7 @@ func (p *Process) OpenFilesWithContext(ctx context.Context) ([]OpenFilesStat, er
 			// 	return
 			// }
 			var buf = make([]byte, syscall.MAX_LONG_PATH)
-			err := windows.GetFileInformationByHandleEx(windows.Handle(file), windows.FileNameInfo, &buf[0], 0)
+			err := windows.GetFileInformationByHandleEx(windows.Handle(file), windows.FileNameInfo, &buf[0], uint32(unsafe.Sizeof(FILE_NAME_INFO{})))
 			if err != nil {
 				fmt.Printf("GetFileInformationByHandleEx err: %s\n", err)
 				return
